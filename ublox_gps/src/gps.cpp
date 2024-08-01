@@ -50,7 +50,7 @@ const std::chrono::milliseconds Gps::default_timeout_ =
     std::chrono::milliseconds(
         static_cast<int>(Gps::kDefaultAckTimeout * 1000));
 
-Gps::Gps(int debug, const rclcpp::Logger& logger) : configured_(false), save_on_shutdown_(false), config_on_startup_flag_(true), debug_(debug), callbacks_(debug), logger_(logger) {
+Gps::Gps(int debug, const rclcpp::Logger& logger) : configured_(false), save_on_shutdown_(false), config_on_startup_flag_(false), debug_(debug), callbacks_(debug), logger_(logger) {
   subscribeAcks();
 }
 
@@ -171,10 +171,10 @@ void Gps::initializeSerial(const std::string & port, unsigned int baudrate,
     RCLCPP_DEBUG(logger_, "U-Blox: Set ASIO baudrate to %u", current_baudrate.value());
   }
   if (config_on_startup_flag_) {
-    configured_ = configUart1(baudrate, uart_in, uart_out);
-    if (!configured_ || current_baudrate.value() != baudrate) {
-      throw std::runtime_error("Could not configure serial baud rate");
-    }
+    //configured_ = configUart1(baudrate, uart_in, uart_out);
+    //if (!configured_ || current_baudrate.value() != baudrate) {
+    //  throw std::runtime_error("Could not configure serial baud rate");
+    //}
   } else {
     configured_ = true;
   }

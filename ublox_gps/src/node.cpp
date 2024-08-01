@@ -244,9 +244,8 @@ void UbloxNode::getRosParams() {
 
   // UART 1 params
   baudrate_ = declareRosIntParameter<uint32_t>(this, "uart1.baudrate", 9600);
-  uart_in_ = declareRosIntParameter<uint16_t>(this, "uart1.in", ublox_msgs::msg::CfgPRT::PROTO_UBX
-                                              | ublox_msgs::msg::CfgPRT::PROTO_NMEA
-                                              | ublox_msgs::msg::CfgPRT::PROTO_RTCM);
+  uart_in_ = declareRosIntParameter<uint16_t>(this, "uart1.in",
+                                              ublox_msgs::msg::CfgPRT::PROTO_RTCM);
   uart_out_ = declareRosIntParameter<uint16_t>(this, "uart1.out", ublox_msgs::msg::CfgPRT::PROTO_UBX);
   // USB params
   set_usb_ = false;
@@ -686,7 +685,7 @@ bool UbloxNode::configureUblox() {
     }
     if (load_.load_mask != 0) {
       RCLCPP_DEBUG(this->get_logger(), "Loading u-blox configuration from memory. %u", load_.load_mask);
-      if (!gps_->configure(load_)) {
+      /*if (!gps_->configure(load_)) {
         throw std::runtime_error(std::string("Failed to load configuration ") +
                                  "from memory");
       }
@@ -699,7 +698,7 @@ bool UbloxNode::configureUblox() {
           throw std::runtime_error(std::string("Failed to reset serial I/O") +
             "after loading I/O configurations from device memory.");
         }
-      }
+      }*/
     }
 
     if (getRosBoolean(this, "config_on_startup")) {
@@ -778,7 +777,7 @@ void UbloxNode::configureInf() {
   msg.blocks.push_back(block);
 
   // IF NMEA is enabled
-  if (uart_in_ & ublox_msgs::msg::CfgPRT::PROTO_NMEA) {
+  /*if (uart_in_ & ublox_msgs::msg::CfgPRT::PROTO_NMEA) {
     ublox_msgs::msg::CfgINFBlock block;
     block.protocol_id = ublox_msgs::msg::CfgINFBlock::PROTOCOL_ID_NMEA;
     // Enable desired INF messages on each NMEA port
@@ -786,7 +785,7 @@ void UbloxNode::configureInf() {
       block.inf_msg_mask[i] = mask;
     }
     msg.blocks.push_back(block);
-  }
+  }*/
 
   RCLCPP_DEBUG(this->get_logger(), "Configuring INF messages");
   if (!gps_->configure(msg)) {
@@ -855,7 +854,7 @@ void UbloxNode::initialize() {
   // Do this last
   initializeRosDiagnostics();
 
-  if (configureUblox()) {
+  if (1/*configureUblox()*/) {
     RCLCPP_INFO(this->get_logger(), "U-Blox configured successfully.");
     // Subscribe to all U-Blox messages
     subscribe();

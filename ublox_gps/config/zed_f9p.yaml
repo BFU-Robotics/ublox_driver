@@ -2,15 +2,15 @@ ublox_gps_node:
   ros__parameters:
     debug: 0                    # Range 0-4 (0 means no debug statements will print)
     device: /dev/ttyACM0
-    frame_id: gps
+    frame_id: gnss_link
     uart1:
-      baudrate: 460800
+      baudrate: 9600
     gnss:
-      glonass: false
-      beidou: false
+      glonass: true
+      beidou: true
       gps: true
-      qzss: false
-      galileo: false
+      qzss: true
+      galileo: true
       imes: false
     # TMODE3 Config
     tmode3: 1                   # Survey-In Mode
